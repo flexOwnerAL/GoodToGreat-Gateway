@@ -1,0 +1,53 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.pytest_cache/
+.ruff_cache/
+logs/*
+!logs/.gitkeep
+data/*
+!data/.gitkeep
+
+# Private DeepBridge authentication data
+.data/deepbridge/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Secrets and local data
+.data/
+*.session
+session.json
+cookies.json
+credentials.json
+token.txt
+
+# Local tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+
+# Local backups, logs and generated metadata
+.backups/
+logs/*
+!logs/.gitkeep
+goodtogreat_gateway.egg-info/
+PYEIF
+
+# Runtime data
+data/*
+!data/.gitkeep
+
+*.bak
+*.bak_*
+
+*.bak
+*.bak_*
