@@ -23,6 +23,10 @@ import time
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Dict, Optional
+try:
+    from playwright.sync_api import sync_playwright  # DeepCode patch
+except ImportError:
+    sync_playwright = None  # DeepCode patch: safe fallback
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -173,13 +177,6 @@ def login(
     CHAT_URL and goes straight to the sign-in page. Callers that have just
     confirmed there's no token (e.g. get_session after a failed headless refresh)
     pass this so the window doesn't visibly bounce CHAT_URL -> SIGNIN_URL."""
-    try:
-        from playwright.sync_api import sync_playwright
-    except ImportError as exc:
-        raise RuntimeError(
-            "Playwright is unavailable. A fresh DeepSeek session must be "
-            "captured in a supported browser environment."
-        ) from exc
 
     profile_dir.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as p:
