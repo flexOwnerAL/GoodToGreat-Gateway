@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "goodtogreat-gateway"
-version = "0.1.0"
-description = "Async multi-provider AI gateway"
+version = "0.5.0"
+description = "Async multi-provider AI gateway — DeepBridge, g4f (in-process), Ollama"
 requires-python = ">=3.10"
 authors = [{name = "flexOwnerAL"}]
 dependencies = [
@@ -13,11 +13,14 @@ dependencies = [
     "uvicorn>=0.30,<1.0",
     "httpx>=0.27,<1.0",
     "pydantic-settings>=2.5,<3.0",
+    # g4f: in-process free-provider engine (replaces the Free-GPT4-WEB-API sidecar).
+    "g4f>=0.3,<1.0",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "pytest-asyncio>=0.23",
     "httpx>=0.27,<1.0",
     "ruff>=0.6",
 ]
@@ -27,6 +30,7 @@ include = ["app*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+asyncio_mode = "auto"
 
 [tool.ruff]
 line-length = 100

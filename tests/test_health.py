@@ -5,7 +5,6 @@ from app.main import app
 def test_health():
     with TestClient(app) as client:
         response = client.get("/health")
-
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
 
@@ -13,19 +12,16 @@ def test_health():
 def test_root():
     with TestClient(app) as client:
         response = client.get("/")
-
     assert response.status_code == 200
-    assert response.json()["author"] == "@flexOwnerAL"
+    data = response.json()
+    assert data["author"] == "@flexOwnerAL"
+    assert "deepbridge" in data["providers"]
 
 
-def test_models_include_deepbridge_models():
+def test_models_include_deepbridge():
     with TestClient(app) as client:
         response = client.get("/v1/models")
-
     assert response.status_code == 200
-
-    data = response.json()["data"]
-    model_ids = {model["id"] for model in data}
-
-    assert "deepseek-chat" in model_ids
-    assert "deepseek-expert" in model_ids
+    ids = {m["id"] for m in response.json()["data"]}
+    assert "deepseek-chat" in ids
+    assert "deepseek-expert" in ids

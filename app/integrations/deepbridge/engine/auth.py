@@ -49,7 +49,7 @@ SIGNIN_URL = "https://chat.deepseek.com/sign_in"
 
 LAUNCH_ARGS = ["--disable-blink-features=AutomationControlled"]
 # Token is trusted for this long before we refresh it from the browser again.
-SESSION_MAX_AGE = 6 * 60 * 60  # 6 hours
+SESSION_MAX_AGE = 14 * 24 * 60 * 60  # 14 days (DeepSeek web sessions usually live long)
 
 
 class LoginRequired(RuntimeError):
@@ -179,6 +179,11 @@ def login(
     pass this so the window doesn't visibly bounce CHAT_URL -> SIGNIN_URL."""
 
     profile_dir.mkdir(parents=True, exist_ok=True)
+    if sync_playwright is None:
+        raise RuntimeError(
+            "Playwright is not installed. Run: "
+            "pip install -U playwright && playwright install chromium"
+        )
     with sync_playwright() as p:
         try:
             context = p.chromium.launch_persistent_context(
@@ -221,12 +226,13 @@ def _headless_refresh(profile_dir: Path) -> Optional[Session]:
     """Try to capture a token headlessly from the persistent profile. Returns a
     saved Session if the profile is still signed in, else None. Never opens a
     visible window."""
-    try:
-        from playwright.sync_api import sync_playwright
-    except ImportError:
-        return None
 
     profile_dir.mkdir(parents=True, exist_ok=True)
+    if sync_playwright is None:
+        raise RuntimeError(
+            "Playwright is not installed. Run: "
+            "pip install -U playwright && playwright install chromium"
+        )
     with sync_playwright() as p:
         try:
             context = p.chromium.launch_persistent_context(

@@ -1,0 +1,22 @@
+[Unit]
+Description=GoodToGreat-Gateway
+After=network.target
+
+[Service]
+Type=simple
+User=gtg
+WorkingDirectory=/opt/gtg/GoodToGreat-Gateway
+EnvironmentFile=/opt/gtg/GoodToGreat-Gateway/.env
+ExecStart=/opt/gtg/GoodToGreat-Gateway/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8080
+Restart=on-failure
+RestartSec=5
+
+# Light sandboxing. Loosen if DeepBridge's Playwright profile needs broader
+# filesystem access on this host.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/opt/gtg/GoodToGreat-Gateway/data /opt/gtg/GoodToGreat-Gateway/logs
+
+[Install]
+WantedBy=multi-user.target
